@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Menu Alat Musik - Matrix</title>
+  
+  <!-- Ambil CSS yang sama persis kayak index.html -->
+  <link rel="stylesheet" href="style.css">
+  
+  <style>
+    /* CSS tambahan khusus buat menu musik, tapi tetap pakai warna yang sama */
+    .music-menu {
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 40px 20px;
+      position: relative;
+      z-index: 2;
+    }
+
+    .menu-title {
+      font-family: var(--font-display);
+      color: var(--green);
+      font-size: 2rem;
+      margin-bottom: 30px;
+      border-bottom: 2px solid var(--green);
+      padding-bottom: 10px;
+      text-shadow: 0 0 20px rgba(57,255,106,0.4);
+    }
+
+    .menu-subtitle {
+      color: var(--green-dim);
+      margin-bottom: 30px;
+      font-size: 0.9rem;
+    }
+
+    .instrument-card {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      background: var(--bg-panel);
+      border: 1px solid var(--green-faint);
+      border-radius: var(--radius);
+      padding: 20px;
+      margin-bottom: 15px;
+      text-decoration: none;
+      color: var(--white);
+      transition: all 0.3s;
+    }
+
+    .instrument-card:hover {
+      border-color: var(--green);
+      box-shadow: 0 0 20px rgba(57,255,106,0.2);
+      transform: translateY(-3px);
+    }
+
+    .icon-instrument {
+      font-size: 2.5rem;
+      color: var(--green);
+    }
+
+    .instrument-info h3 {
+      font-family: var(--font-display);
+      color: var(--green);
+      margin: 0 0 5px;
+    }
+
+    .instrument-info p {
+      margin: 0;
+      color: var(--green-dim);
+      font-size: 0.85rem;
+    }
+
+    .status-soon {
+      color: var(--red);
+      font-size: 0.8rem;
+      border: 1px solid var(--red);
+      padding: 3px 8px;
+      border-radius: 20px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Hujan Matrix background -->
+  <canvas id="matrix-rain"></canvas>
+
+  <div class="music-menu">
+    <a href="index.html" class="back-link">← Kembali ke Portofolio</a>
+
+    <h1 class="menu-title">🎺 MARCHING BAND</h1>
+    <p class="menu-subtitle">[ PILIH INSTRUMEN ] — Klik untuk memainkan</p>
+
+    <!-- Link ke Trumpet -->
+    <a href="MB/trumpet.html" class="instrument-card">
+      <span class="icon-instrument">🎺</span>
+      <div class="instrument-info">
+        <h3>TRUMPET</h3>
+        <p>Piston bergerak & nada realistis</p>
+      </div>
+    </a>
+
+    <!-- Link ke Tuba (belum ada) -->
+    <a href="#" class="instrument-card" onclick="alert('Tuba segera hadir!'); return false;">
+      <span class="icon-instrument">🎷</span>
+      <div class="instrument-info">
+        <h3>TUBA</h3>
+        <p>Piston bergerak & nada bass</p>
+      </div>
+      <span class="status-soon">SOON</span>
+    </a>
+
+    <!-- Link ke Mellophone (belum ada) -->
+    <a href="#" class="instrument-card" onclick="alert('Mellophone segera hadir!'); return false;">
+      <span class="icon-instrument">🎶</span>
+      <div class="instrument-info">
+        <h3>MELLOPHONE</h3>
+        <p>Piston bergerak & nada lembut</p>
+      </div>
+      <span class="status-soon">SOON</span>
+    </a>
+  </div>
+
+  <!-- Ambil script hujan matrix dari index.html (fungsi yang sama) -->
+  <script src="script.js"></script>
+  
+  <!-- Script kecil khusus untuk memunculkan hujan matrix di halaman ini -->
+  <script>
+    // Re-run fungsi matrix rain karena script.js akan langsung redirect kalau belum login
+    // Tapi kita panggil manual canvas-nya disini
+    (function matrixRain() {
+      const canvas = document.getElementById('matrix-rain');
+      const ctx = canvas.getContext('2d');
+      const FONT_SIZE = 24;
+      const chars = "01";
+      const SPACING = 36;
+      let width, height, columns, drops;
+
+      function resize() {
+        width = canvas.width = window.innerWidth;
+        height = canvas.height = window.innerHeight;
+        const newColumns = Math.floor(width / SPACING);
+        if (drops && drops.length) {
+          if (newColumns > drops.length) {
+            for (let i = drops.length; i < newColumns; i++) drops.push(Math.random() * -60);
+          } else {
+            drops = drops.slice(0, newColumns);
+          }
+        } else {
+          drops = [];
+          for (let i = 0; i < newColumns; i++) drops.push(Math.random() * -60);
+        }
+        columns = newColumns;
+      }
+      window.addEventListener('resize', resize);
+      resize();
+
+      function draw() {
+        ctx.fillStyle = "rgba(5, 8, 5, 0.06)";
+        ctx.fillRect(0, 0, width, height);
+        ctx.font = `bold ${FONT_SIZE}px monospace`;
+        ctx.textAlign = 'center';
+        for (let i = 0; i < drops.length; i++) {
+          const x = i * SPACING + SPACING / 2;
+          const y = drops[i] * FONT_SIZE;
+          for (let t = 0; t < 12; t++) {
+            const ty = y - t * FONT_SIZE;
+            if (ty < -FONT_SIZE || ty > height) continue;
+            const ch = chars[Math.floor(Math.random() * chars.length)];
+            if (t === 0) {
+              ctx.fillStyle = "#ffffff";
+              ctx.shadowBlur = 20;
+              ctx.shadowColor = "#39ff6a";
+            } else {
+              const alpha = Math.max(0, 1 - t / 12);
+              ctx.fillStyle = `rgba(57, 255, 106, ${alpha})`;
+              ctx.shadowBlur = 10;
+              ctx.shadowColor = "rgba(57, 255, 106, 0.3)";
+            }
+            ctx.fillText(ch, x, ty);
+          }
+          if (y > height && Math.random() > 0.975) drops[i] = Math.random() * -40;
+          drops[i] += 0.45;
+        }
+      }
+      setInterval(draw, 40);
+    })();
+  </script>
+
+</body>
+</html>
