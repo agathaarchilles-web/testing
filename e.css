@@ -9,7 +9,7 @@ body {
   justify-content: center;
   align-items: center;
   height: 100vh;
-  overflow: hidden;
+  flex-direction: column;
 }
 
 #gameCanvas {
@@ -19,18 +19,14 @@ body {
 }
 
 .game-hud {
-  position: fixed;
-  top: 20px;
-  left: 50%;
-  transform: translateX(-50%);
   display: flex;
   gap: 30px;
+  margin-bottom: 10px;
+  color: #39ff6a;
   font-size: 1.2rem;
-  z-index: 10;
   background: rgba(0,0,0,0.8);
   padding: 10px 20px;
   border-radius: 8px;
-  color: #39ff6a;
 }
 
 .game-overlay {
@@ -57,36 +53,24 @@ body {
   margin-bottom: 20px;
 }
 
-.game-overlay button {
+.game-overlay button,
+.game-overlay a {
   background: #39ff6a;
   color: #000;
   border: none;
   padding: 15px 30px;
-  font-size: 1rem;
   font-family: 'Share Tech Mono', monospace;
+  font-size: 1rem;
   cursor: pointer;
   margin: 10px;
   border-radius: 5px;
+  text-decoration: none;
+  display: inline-block;
   transition: all 0.3s;
 }
 
-.game-overlay button:hover {
+.game-overlay button:hover,
+.game-overlay a:hover {
   background: #2ecc71;
   transform: scale(1.05);
-}
-
-.game-overlay a {
-  color: #39ff6a;
-  text-decoration: none;
-  margin-top: 10px;
-  font-size: 0.9rem;
-  border: 1px solid #39ff6a;
-  padding: 10px 20px;
-  border-radius: 5px;
-  transition: all 0.3s;
-}
-
-.game-overlay a:hover {
-  background: #39ff6a;
-  color: #000;
 }
